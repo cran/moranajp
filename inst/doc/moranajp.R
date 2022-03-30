@@ -1,0 +1,31 @@
+## ---- include = FALSE---------------------------------------------------------
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+## ----setup--------------------------------------------------------------------
+library(tidyverse)
+library(moranajp)
+
+## -----------------------------------------------------------------------------
+bin_dir <- "d:/pf/mecab/bin/" # input your environment
+library(tidyverse)
+
+data(neko)
+neko <- 
+  neko %>%
+  dplyr::mutate(text = stringi::stri_unescape_unicode(text)) %>%
+  dplyr::mutate(cols = 1:nrow(.))
+head(neko)
+
+n_match <- 
+  list.files(bin_dir) %>%
+  stringr::str_count("mecab") %>%
+  sum()
+
+if(n_match > 0){
+  moranajp_all(neko, text_col = "text", bin_dir = bin_dir) %>%
+    print(n=100)
+}
+
