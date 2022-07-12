@@ -5,6 +5,7 @@ knitr::opts_chunk$set(
 )
 
 ## ----setup--------------------------------------------------------------------
+options(encoding="UTF-8")
 library(tidyverse)
 library(moranajp)
 
@@ -25,7 +26,7 @@ n_match <-
   sum()
 
 if(n_match > 0){
-  moranajp_all(neko, text_col = "text", bin_dir = bin_dir) %>%
+  moranajp_all(neko, text_col = "text", bin_dir = bin_dir, iconv = "CP932_UTF-8") %>%
     print(n=100)
 }
 

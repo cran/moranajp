@@ -9,9 +9,15 @@
 \alias{mecab}
 \title{Morphological analysis for a specific column in dataframe}
 \usage{
-moranajp_all(tbl, bin_dir, text_col = "text", option = "")
+moranajp_all(
+  tbl,
+  bin_dir,
+  text_col = "text",
+  option = "",
+  iconv = "CP932_UTF-8"
+)
 
-moranajp(tbl, bin_dir, option = "")
+moranajp(tbl, bin_dir, option = "", iconv = "")
 
 make_cmd_mecab(tbl, bin_dir, option = "")
 
@@ -31,6 +37,11 @@ mecab(tbl, bin_dir)
 \item{option}{A text. Options for mecab.
 "-b" option is already set by moranajp.
 See by "mecab -h".}
+
+\item{iconv}{A text. Convert encoding of MeCab output.
+Default (""): don't convert.
+"CP932_UTF-8": iconv(output, from = "Shift-JIS" to = "UTF-8")
+"EUC_UTF-8"  : iconv(output, from = "eucjp", to = "UTF-8")}
 }
 \value{
 A tibble.   Output of 'MeCab' and added column "text_id".
@@ -47,7 +58,8 @@ Keep other colnames in dataframe.
       neko \%>\%
       dplyr::mutate(text=stringi::stri_unescape_unicode(text)) \%>\%
       dplyr::mutate(cols=1:nrow(.))
-  moranajp_all(neko, text_col = "text") \%>\%
+  bin_dir <- "d:/pf/mecab/bin"
+  moranajp_all(neko, text_col = "text", bin_dir = bin_dir) \%>\%
       print(n=100)
 }
 }

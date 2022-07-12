@@ -1,7 +1,7 @@
 # moranajp release news
 
 
-# moranajp 0.9.4.9000
+# moranajp 0.9.5.9000
 
 * Todo
     * Deprecate `mecab()` and `mecab_all()`.
@@ -9,8 +9,16 @@
       to be able to use "sudachi"
 * Done
 
+# moranajp 0.9.5
+
+* 2022-07-12
+* Fix Bugs: to apply illegal character
+    * `moranajp()` add argument "iconv" to convert encoding of MeCab output
+    * Remove illegal character ( &, |, <. > or ") for command in `moranajp_all()`
+
 # moranajp 0.9.4
 
+* 2022-05-06
 * Can apply over 8000 length strings.
     * `make_groups()`
     * `make_groups_sub()`
@@ -19,6 +27,7 @@
 
 # moranajp 0.9.3
 
+* 2022-03-30
 * Improve functions.
     * `moranajp_all()` <- `mecab_all()`
     * `moranajp()` <- `mecab()`
