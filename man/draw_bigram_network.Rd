@@ -3,21 +3,24 @@
 \name{draw_bigram_network}
 \alias{draw_bigram_network}
 \alias{bigram}
-\alias{bigram_net}
+\alias{bigram_depend}
+\alias{bigram_network}
 \alias{word_freq}
 \alias{bigram_network_plot}
 \title{Draw bigram network using morphological analysis data.}
 \usage{
-draw_bigram_network(df, ...)
+draw_bigram_network(df, draw = TRUE, ...)
 
-bigram(df, text_id = "text_id", ...)
+bigram(df, group = "sentence", depend = FALSE, term_depend = NULL, ...)
 
-bigram_net(bigram, rand_seed = 12, threshold = 100, ...)
+bigram_depend(df, group = "sentence")
 
-word_freq(df, bigram_net)
+bigram_network(bigram, rand_seed = 12, threshold = 100, ...)
+
+word_freq(df, big_net, ...)
 
 bigram_network_plot(
-  bigram_net,
+  big_net,
   freq,
   ...,
   arrow_size = 5,
@@ -34,9 +37,15 @@ bigram_network_plot(
 \arguments{
 \item{df}{A dataframe including result of morphological analysis.}
 
+\item{draw}{A logical.}
+
 \item{...}{Extra arguments to internal fuctions.}
 
-\item{text_id}{A dstring to specify text.}
+\item{group}{A string to specify sentence.}
+
+\item{depend}{A logical.}
+
+\item{term_depend}{A string of dependnt terms column to use bigram.}
 
 \item{bigram}{A result of bigram().}
 
@@ -44,9 +53,9 @@ bigram_network_plot(
 
 \item{threshold}{A numeric used as threshold for frequency of bigram.}
 
-\item{bigram_net}{A result of bigram_net().}
+\item{big_net}{A result of bigram_network().}
 
-\item{freq}{A numeric of word frequency in bigram_net.
+\item{freq}{A numeric of word frequency in bigram_network.
 Can be got using word_freq().}
 
 \item{arrow_size, circle_size, text_size, }{A numeric.}
@@ -61,39 +70,58 @@ in bigram network.}
 \item{no_scale}{A logical. FALSE: Not draw x and y axis.}
 }
 \value{
-A gg object of bigram network plot.
+A list including df (input), bigram, freq (frequency) and
+gg (ggplot2 object of bigram network plot).
 }
 \description{
 Draw bigram network using morphological analysis data.
 }
 \examples{
-library(tidyverse)
-data(neko_mecab)
+library(magrittr)
 data(synonym)
-synonym <- 
-  synonym \%>\% dplyr::mutate_all(stringi::stri_unescape_unicode)
+synonym <- unescape_utf(synonym)
+
+data(neko_mecab)
+neko_mecab <- 
+  neko_mecab  \%>\%
+  unescape_utf() \%>\%
+  add_sentence_no() \%>\%
+  clean_up(use_common_data = TRUE, synonym_df = synonym)
 
 bigram_neko <- 
   neko_mecab \%>\%
-  dplyr::select(-text_id) \%>\%
-  dplyr::mutate_all(stringi::stri_unescape_unicode) \%>\%
-  magrittr::set_colnames(stringi::stri_unescape_unicode(colnames(.))) \%>\%
-  clean_mecab_local(
-    use_common_data = TRUE, 
-    synonym_df = synonym) \%>\%
   draw_bigram_network()
+
+data(neko_ginza)
+neko_ginza <- 
+  neko_ginza \%>\%
+  unescape_utf() \%>\%
+  add_sentence_no() \%>\%
+  clean_up(add_depend = TRUE, use_common_data = TRUE, synonym_df = synonym)
+
+bigram_neko_ginza_dep <- 
+  neko_ginza \%>\%
+  bigram(depend = TRUE)
 
 add_stop_words <- 
   c("\\\\u3042\\\\u308b", "\\\\u3059\\\\u308b", "\\\\u3066\\\\u308b", 
     "\\\\u3044\\\\u308b","\\\\u306e", "\\\\u306a\\\\u308b", "\\\\u304a\\\\u308b", 
     "\\\\u3093", "\\\\u308c\\\\u308b", "*") \%>\% 
-  stringi::stri_unescape_unicode()
+   unescape_utf()
 
+data(review_chamame)
 bigram_review <- 
   review_chamame \%>\%
-  dplyr::mutate_all(stringi::stri_unescape_unicode) \%>\%
-  magrittr::set_colnames(stringi::stri_unescape_unicode(colnames(.))) \%>\%
-  clean_chamame(add_stop_words = add_stop_words) \%>\%
+  unescape_utf() \%>\%
+  add_sentence_no() \%>\%
+  clean_up(add_stop_words = add_stop_words) \%>\%
   draw_bigram_network()
+
+data(review_ginza)
+review_ginza \%>\%
+  unescape_utf() \%>\%
+  add_sentence_no() \%>\%
+  clean_up(add_depend = TRUE) \%>\%
+  draw_bigram_network(depend = TRUE)
 
 }

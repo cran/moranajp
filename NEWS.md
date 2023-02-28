@@ -1,13 +1,16 @@
 # moranajp release news
 
-
-# moranajp 0.9.5.9000
+# moranajp 0.9.6
 
 * Todo
-    * Deprecate `mecab()` and `mecab_all()`.
+    * Deprecate `mecab()` and `mecab_all()`
+    * Organise and tidy add_id() and related functions
+
+* 2023-02-28
+* Add `bigram()` and related functions
+* Can use "sudachi", "ginza" and "chamame"
     * Add `method` argument in `mecab()` and `mecab_all()` 
-      to be able to use "sudachi"
-* Done
+      to be able to use "sudachi", "ginza" and "chamame"
 
 # moranajp 0.9.5
 

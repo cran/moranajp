@@ -6,18 +6,15 @@ knitr::opts_chunk$set(
 
 ## ----setup--------------------------------------------------------------------
 options(encoding="UTF-8")
-library(tidyverse)
+library(magrittr)
+library(stringr)
 library(moranajp)
 
 ## -----------------------------------------------------------------------------
 bin_dir <- "d:/pf/mecab/bin/" # input your environment
-library(tidyverse)
 
 data(neko)
-neko <- 
-  neko %>%
-  dplyr::mutate(text = stringi::stri_unescape_unicode(text)) %>%
-  dplyr::mutate(cols = 1:nrow(.))
+neko <- unescape_utf(neko)
 head(neko)
 
 n_match <- 
@@ -25,8 +22,10 @@ n_match <-
   stringr::str_count("mecab") %>%
   sum()
 
-if(n_match > 0){
-  moranajp_all(neko, text_col = "text", bin_dir = bin_dir, iconv = "CP932_UTF-8") %>%
-    print(n=100)
-}
+  # if(n_match > 0){
+  #   neko %>%
+  #     unescape_utf() %>%
+  #     moranajp_all(text_col = "text", bin_dir = bin_dir, iconv = "CP932_UTF-8") %>%
+  #     print(n=100)
+  # }
 

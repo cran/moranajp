@@ -3,25 +3,54 @@
 \name{moranajp_all}
 \alias{moranajp_all}
 \alias{moranajp}
+\alias{remove_linebreaks}
+\alias{separate_cols_ginza}
+\alias{make_input}
+\alias{make_cmd}
 \alias{make_cmd_mecab}
 \alias{out_cols_mecab}
+\alias{out_cols_ginza}
+\alias{out_cols_sudachi}
+\alias{out_cols_jp}
+\alias{out_cols_en}
+\alias{out_cols}
 \alias{mecab_all}
 \alias{mecab}
 \title{Morphological analysis for a specific column in dataframe}
 \usage{
 moranajp_all(
   tbl,
-  bin_dir,
+  bin_dir = "",
+  method = "mecab",
   text_col = "text",
   option = "",
-  iconv = "CP932_UTF-8"
+  iconv = "",
+  col_lang = "jp"
 )
 
-moranajp(tbl, bin_dir, option = "", iconv = "")
+moranajp(tbl, bin_dir, method, text_col, option = "", iconv = "", col_lang)
 
-make_cmd_mecab(tbl, bin_dir, option = "")
+remove_linebreaks(tbl, text_col)
 
-out_cols_mecab()
+separate_cols_ginza(tbl, col_lang)
+
+make_input(tbl, text_col, iconv, brk = "BPOMORANAJP ")
+
+make_cmd(method, option = "")
+
+make_cmd_mecab(option = "")
+
+out_cols_mecab(col_lang = "jp")
+
+out_cols_ginza(col_lang = "jp")
+
+out_cols_sudachi(col_lang = "jp")
+
+out_cols_jp()
+
+out_cols_en()
+
+out_cols()
 
 mecab_all(tbl, text_col = "text", bin_dir = "")
 
@@ -32,19 +61,50 @@ mecab(tbl, bin_dir)
 
 \item{bin_dir}{A text. Directory of mecab.}
 
+\item{method}{A text. Method to use: "mecab", "ginza",
+"sudachi_a", "sudachi_b", "sudachi_c", or "chamame".
+"a", "b" and "c" specify the mode of splitting.
+"a" split shortest, "b" middle and "c" longest.
+See https://github.com/WorksApplications/Sudachi for detail.
+"chamame" use https://chamame.ninjal.ac.jp/ and rvest.}
+
 \item{text_col}{A text. Colnames for morphological analysis.}
 
 \item{option}{A text. Options for mecab.
 "-b" option is already set by moranajp.
-See by "mecab -h".}
+To see option, use "mecab -h" in command (win) or terminal (Mac).}
 
 \item{iconv}{A text. Convert encoding of MeCab output.
 Default (""): don't convert.
 "CP932_UTF-8": iconv(output, from = "Shift-JIS" to = "UTF-8")
-"EUC_UTF-8"  : iconv(output, from = "eucjp", to = "UTF-8")}
+"EUC_UTF-8"  : iconv(output, from = "eucjp", to = "UTF-8")
+iconv is also used to convert input text before running MeCab.
+"CP932_UTF-8": iconv(input, from =  "UTF-8", to = "Shift-JIS")}
+
+\item{col_lang}{A text. "jp" or "en"}
+
+\item{brk}{A string of break point}
 }
 \value{
 A tibble.   Output of 'MeCab' and added column "text_id".
+
+A string
+
+A string
+
+A string
+
+A character vector
+
+A character vector
+
+A character vector
+
+A character vector
+
+A character vector
+
+A data.frame
 }
 \description{
 Using 'MeCab' for morphological analysis.
@@ -52,14 +112,31 @@ Keep other colnames in dataframe.
 }
 \examples{
 \dontrun{
-  library(tidyverse)
+  library(magrittr)
   data(neko)
   neko <-
       neko \%>\%
-      dplyr::mutate(text=stringi::stri_unescape_unicode(text)) \%>\%
-      dplyr::mutate(cols=1:nrow(.))
+      unescape_utf()
+
+  # mecab
   bin_dir <- "d:/pf/mecab/bin"
-  moranajp_all(neko, text_col = "text", bin_dir = bin_dir) \%>\%
+  iconv <- "CP932_UTF-8"
+  neko \%>\%
+    moranajp_all(text_col = "text", bin_dir = bin_dir, iconv = iconv) \%>\%
+        print(n=100)
+
+  # ginza
+  neko \%>\%
+    moranajp_all(text_col = "text", method = "ginza") \%>\%
       print(n=100)
+
+  # sudachi
+  bin_dir <- "d:/pf/sudachi"
+  iconv <- "CP932_UTF-8"
+  neko \%>\%
+    moranajp_all(text_col = "text", bin_dir = bin_dir, 
+                 method = "sudachi_a", iconv = iconv) \%>\%
+        print(n=100)
+
 }
 }

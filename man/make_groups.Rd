@@ -10,13 +10,13 @@ make_groups(
   tbl,
   text_col = "text",
   length = 8000,
-  group = "tmp_group",
+  tmp_group = "tmp_group",
   str_length = "str_length"
 )
 
-make_groups_sub(tbl, text_col, n_group, group, str_length)
+make_groups_sub(tbl, text_col, n_group, tmp_group, str_length)
 
-max_sum_str_length(tbl, group, str_length)
+max_sum_str_length(tbl, tmp_group, str_length)
 }
 \arguments{
 \item{tbl}{A tibble or data.frame.}
@@ -25,12 +25,30 @@ max_sum_str_length(tbl, group, str_length)
 
 \item{length}{A numeric.}
 
-\item{group, str_length}{A string to use temporary.}
+\item{tmp_group, str_length}{A string to use temporary.}
 
 \item{n_group}{A numeric.}
 }
 \value{
 A tibble.   Output of 'MeCab' and added column "text_id".
+
+A string
+
+A string
+
+A string
+
+A character vector
+
+A character vector
+
+A character vector
+
+A character vector
+
+A character vector
+
+A data.frame
 }
 \description{
 Using 'MeCab' for morphological analysis.
@@ -38,14 +56,31 @@ Keep other colnames in dataframe.
 }
 \examples{
 \dontrun{
-  library(tidyverse)
+  library(magrittr)
   data(neko)
   neko <-
       neko \%>\%
-      dplyr::mutate(text=stringi::stri_unescape_unicode(text)) \%>\%
-      dplyr::mutate(cols=1:nrow(.))
+      unescape_utf()
+
+  # mecab
   bin_dir <- "d:/pf/mecab/bin"
-  moranajp_all(neko, text_col = "text", bin_dir = bin_dir) \%>\%
+  iconv <- "CP932_UTF-8"
+  neko \%>\%
+    moranajp_all(text_col = "text", bin_dir = bin_dir, iconv = iconv) \%>\%
+        print(n=100)
+
+  # ginza
+  neko \%>\%
+    moranajp_all(text_col = "text", method = "ginza") \%>\%
       print(n=100)
+
+  # sudachi
+  bin_dir <- "d:/pf/sudachi"
+  iconv <- "CP932_UTF-8"
+  neko \%>\%
+    moranajp_all(text_col = "text", bin_dir = bin_dir, 
+                 method = "sudachi_a", iconv = iconv) \%>\%
+        print(n=100)
+
 }
 }
