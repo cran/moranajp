@@ -21,9 +21,9 @@ delete_stop_words(df, use_common_data = TRUE, add_stop_words = NULL, ...)
 
 replace_words(
   df,
-  synonym_df = NULL,
-  synonym_from = NULL,
-  synonym_to = NULL,
+  synonym_df = tibble::tibble(),
+  synonym_from = "",
+  synonym_to = "",
   ...
 )
 
@@ -38,7 +38,7 @@ term_pos_1(df)
 
 \item{add_depend}{A logical. Available for ginza}
 
-\item{...}{Extra arguments to internal fuctions.}
+\item{...}{Extra arguments to internal functions.}
 
 \item{use_common_data}{A logical. TRUE: use data(stop_words).}
 
@@ -46,7 +46,7 @@ term_pos_1(df)
 When use_common_data is TRUE and add_stop_words are given,
 both of them will be used as stop_words.}
 
-\item{synonym_df}{A datarame including synonym word pairs.
+\item{synonym_df}{A data.frame including synonym word pairs.
 The first column: replace from, the second: replace to.}
 
 \item{synonym_from, synonym_to}{A string vector. Length of synonym_from and synonym_to
@@ -55,36 +55,35 @@ When synonym_df and synonym pairs (synonym_from and synonym_to)
 are given, both of them will be used as synonym.}
 }
 \value{
-A dataframe.
+A data.frame.
 }
 \description{
 Clean up result of morphological analyzed data frame
 }
 \examples{
-library(magrittr)
 data(neko_mecab)
 data(neko_ginza)
 data(review_sudachi_c)
 data(synonym)
 synonym <- 
-  synonym \%>\% unescape_utf()
+  synonym |> unescape_utf()
 
 neko_mecab <- 
-  neko_mecab \%>\%
-  unescape_utf() \%>\%
+  neko_mecab |>
+  unescape_utf() |>
   print()
 
-neko_mecab \%>\%
+neko_mecab |>
   clean_up(use_common_data = TRUE, synonym_df = synonym)
 
-neko_ginza \%>\%
-  unescape_utf() \%>\%
-  add_sentence_no() \%>\%
+review_ginza |>
+  unescape_utf() |>
+  add_sentence_no() |>
   clean_up(add_depend = TRUE, use_common_data = TRUE, synonym_df = synonym)
 
-review_sudachi_c \%>\%
-  unescape_utf() \%>\%
-  add_sentence_no() \%>\%
+review_sudachi_c |>
+  unescape_utf() |>
+  add_sentence_no() |>
   clean_up(use_common_data = TRUE, synonym_df = synonym)
 
 }

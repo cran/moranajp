@@ -30,7 +30,7 @@ max_sum_str_length(tbl, tmp_group, str_length)
 \item{n_group}{A numeric.}
 }
 \value{
-A tibble.   Output of 'MeCab' and added column "text_id".
+A tibble.   Output of morphological analysis and added column "text_id".
 
 A string
 
@@ -55,32 +55,39 @@ Using 'MeCab' for morphological analysis.
 Keep other colnames in dataframe.
 }
 \examples{
-\dontrun{
-  library(magrittr)
+\donttest{
+  # sample data of Japanese sentences
   data(neko)
   neko <-
-      neko \%>\%
+      neko |>
       unescape_utf()
+  # chamame
+  neko |>
+    moranajp_all(method = "chamame") |>
+        print(n=100)
+}
+\dontrun{
+  # Need to install 'mecab', 'ginza', or 'sudachi' in local PC
 
   # mecab
   bin_dir <- "d:/pf/mecab/bin"
   iconv <- "CP932_UTF-8"
-  neko \%>\%
-    moranajp_all(text_col = "text", bin_dir = bin_dir, iconv = iconv) \%>\%
+  neko |>
+    moranajp_all(text_col = "text", bin_dir = bin_dir, iconv = iconv) |>
         print(n=100)
 
   # ginza
-  neko \%>\%
-    moranajp_all(text_col = "text", method = "ginza") \%>\%
+  neko |>
+    moranajp_all(text_col = "text", method = "ginza") |>
       print(n=100)
 
   # sudachi
   bin_dir <- "d:/pf/sudachi"
   iconv <- "CP932_UTF-8"
-  neko \%>\%
-    moranajp_all(text_col = "text", bin_dir = bin_dir, 
-                 method = "sudachi_a", iconv = iconv) \%>\%
+  neko |>
+    moranajp_all(text_col = "text", bin_dir = bin_dir,
+                 method = "sudachi_a", iconv = iconv) |>
         print(n=100)
-
 }
+
 }

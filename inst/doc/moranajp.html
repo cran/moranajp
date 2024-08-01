@@ -12,7 +12,7 @@
 
 <meta name="author" content="Toshikazu, Matsumura" />
 
-<meta name="date" content="2023-02-28" />
+<meta name="date" content="2024-07-30" />
 
 <title>moranajp</title>
 
@@ -51,7 +51,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -340,40 +340,26 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">moranajp</h1>
 <h4 class="author">Toshikazu, Matsumura</h4>
-<h4 class="date">2023-02-28</h4>
+<h4 class="date">2024-07-30</h4>
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">encoding=</span><span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(moranajp)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bin_dir <span class="ot">&lt;-</span> <span class="st">&quot;d:/pf/mecab/bin/&quot;</span> <span class="co"># input your environment</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(neko)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>neko <span class="ot">&lt;-</span> <span class="fu">unescape_utf</span>(neko)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(neko)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 1</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   text                                                                         </span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                                                                        </span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 吾輩は猫である。名前はまだ無い。                                             </span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣…</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 この書生の掌の裏でしばらくはよい心持に坐っておったが、しばらくすると非常な速…</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 ふと気が付いて見ると書生はいない。たくさんおった兄弟が一疋も見えぬ。肝心の母…</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 ようやくの思いで笹原を這い出すと向うに大きな池がある。吾輩は池の前に坐ってど…</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 吾輩の主人は滅多に吾輩と顔を合せる事がない。職業は教師だそうだ。学校から帰る…</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>n_match <span class="ot">&lt;-</span> </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list.files</span>(bin_dir) <span class="sc">%&gt;%</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_count</span>(<span class="st">&quot;mecab&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>()</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if(n_match &gt; 0){</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   neko %&gt;%</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     unescape_utf() %&gt;%</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     moranajp_all(text_col = &quot;text&quot;, bin_dir = bin_dir, iconv = &quot;CP932_UTF-8&quot;) %&gt;%</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     print(n=100)</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># }</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(moranajp)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(neko)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>neko <span class="ot">&lt;-</span> <span class="fu">unescape_utf</span>(neko)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">head</span>(neko)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>n_match <span class="ot">&lt;-</span> </span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">list.files</span>(bin_dir) <span class="sc">|&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_count</span>(<span class="st">&quot;mecab&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="fu">sum</span>()</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="co"># if(n_match &gt; 0){</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="co">#   neko |&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="co">#     unescape_utf() |&gt;</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="co">#     moranajp_all(text_col = &quot;text&quot;, bin_dir = bin_dir, iconv = &quot;CP932_UTF-8&quot;) |&gt;</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="co">#     print(n=100)</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="co"># }</span></span></code></pre></div>
 
 
 

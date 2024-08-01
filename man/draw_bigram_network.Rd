@@ -3,6 +3,7 @@
 \name{draw_bigram_network}
 \alias{draw_bigram_network}
 \alias{bigram}
+\alias{trigram}
 \alias{bigram_depend}
 \alias{bigram_network}
 \alias{word_freq}
@@ -12,6 +13,8 @@
 draw_bigram_network(df, draw = TRUE, ...)
 
 bigram(df, group = "sentence", depend = FALSE, term_depend = NULL, ...)
+
+trigram(df, group = "sentence")
 
 bigram_depend(df, group = "sentence")
 
@@ -39,13 +42,13 @@ bigram_network_plot(
 
 \item{draw}{A logical.}
 
-\item{...}{Extra arguments to internal fuctions.}
+\item{...}{Extra arguments to internal functions.}
 
 \item{group}{A string to specify sentence.}
 
 \item{depend}{A logical.}
 
-\item{term_depend}{A string of dependnt terms column to use bigram.}
+\item{term_depend}{A string of dependent terms column to use bigram.}
 
 \item{bigram}{A result of bigram().}
 
@@ -62,7 +65,7 @@ Can be got using word_freq().}
 
 \item{font_family}{A string.}
 
-\item{arrow_col, circle_col}{A string to specicy arrow and circle color
+\item{arrow_col, circle_col}{A string to specify arrow and circle color
 in bigram network.}
 
 \item{x_limits, y_limits}{A Pair of numeric to specify range.}
@@ -77,51 +80,16 @@ gg (ggplot2 object of bigram network plot).
 Draw bigram network using morphological analysis data.
 }
 \examples{
-library(magrittr)
-data(synonym)
-synonym <- unescape_utf(synonym)
 
-data(neko_mecab)
-neko_mecab <- 
-  neko_mecab  \%>\%
-  unescape_utf() \%>\%
-  add_sentence_no() \%>\%
-  clean_up(use_common_data = TRUE, synonym_df = synonym)
-
-bigram_neko <- 
-  neko_mecab \%>\%
-  draw_bigram_network()
-
-data(neko_ginza)
-neko_ginza <- 
-  neko_ginza \%>\%
-  unescape_utf() \%>\%
-  add_sentence_no() \%>\%
-  clean_up(add_depend = TRUE, use_common_data = TRUE, synonym_df = synonym)
-
-bigram_neko_ginza_dep <- 
-  neko_ginza \%>\%
-  bigram(depend = TRUE)
-
-add_stop_words <- 
-  c("\\\\u3042\\\\u308b", "\\\\u3059\\\\u308b", "\\\\u3066\\\\u308b", 
-    "\\\\u3044\\\\u308b","\\\\u306e", "\\\\u306a\\\\u308b", "\\\\u304a\\\\u308b", 
-    "\\\\u3093", "\\\\u308c\\\\u308b", "*") \%>\% 
-   unescape_utf()
-
-data(review_chamame)
-bigram_review <- 
-  review_chamame \%>\%
-  unescape_utf() \%>\%
-  add_sentence_no() \%>\%
-  clean_up(add_stop_words = add_stop_words) \%>\%
-  draw_bigram_network()
-
-data(review_ginza)
-review_ginza \%>\%
-  unescape_utf() \%>\%
-  add_sentence_no() \%>\%
-  clean_up(add_depend = TRUE) \%>\%
-  draw_bigram_network(depend = TRUE)
+sentences <- 50
+len <- 30
+n <- sentences * len
+x <- letters
+prob <- (length(x):1) ^ 3
+df <- 
+  tibble::tibble(
+    lemma = sample(x = x, size = n, replace = TRUE, prob = prob),
+    sentence = rep(seq(sentences), each = len))
+draw_bigram_network(df)
 
 }

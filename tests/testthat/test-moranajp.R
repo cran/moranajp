@@ -12,10 +12,10 @@ test_that("text_id of moranajp matches text number", {
     bin_dir <- bin_dir[file.exists(bin_dir)]
     if(length(bin_dir) == 1){
       res <-
-          neko %>%
-          dplyr::mutate(text=stringi::stri_unescape_unicode(text)) %>%
-          dplyr::mutate(cols=1:nrow(.)) %>%
-          moranajp_all(text_col="text", bin_dir=bin_dir, iconv = "CP932_UTF-8")
+          neko |>
+          dplyr::mutate(text = stringi::stri_unescape_unicode(text)) |>
+          dplyr::mutate(cols = dplyr::row_number()) |>
+          moranajp_all(text_col = "text", bin_dir = bin_dir, iconv = "CP932_UTF-8")
     }
     skip_if(length(bin_dir) != 1)
         expect_equal(res$cols, res$text_id)

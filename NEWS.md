@@ -1,10 +1,13 @@
 # moranajp release news
 
-# moranajp 0.9.6
+# moranajp 0.9.7
 
-* Todo
-    * Deprecate `mecab()` and `mecab_all()`
-    * Organise and tidy add_id() and related functions
+* 2024-07-12
+* Update `moranajp()` according to web-chamame update
+* Use pkgdown
+* Change pipe `%>%` into `|>`
+
+# moranajp 0.9.6
 
 * 2023-02-28
 * Add `bigram()` and related functions
